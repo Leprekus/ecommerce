@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className='max-w-7xl mx-auto overflow-x-hidden'>
+      <body className=' min-h-screen max-w-7xl mx-auto overflow-x-hidden flex items-center justify-center'>
           <ClerkProvider>{children}</ClerkProvider>
         </body>
     </html>
