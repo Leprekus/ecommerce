@@ -6,3 +6,4 @@ Name and theme of ecommerce site still to be decided. I wanted to create a full 
 Next.JS
 TypeScript
 PlanetScale
+Clerk
