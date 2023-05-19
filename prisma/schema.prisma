@@ -53,8 +53,11 @@ model Order {
   id          Int        @id @default(autoincrement())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  //indicates a one to many relation
   user        User       @relation(fields: [userId], references: [id])
   userId      Int
   products    Product[]  @relation("OrderProduct")
   // Add more fields as needed, such as total price, shipping details, etc.
+
+  @@index([userId])
 }
