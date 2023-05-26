@@ -14,3 +14,7 @@ TypeScript - Language
 PlanetScale - Database
 Clerk - User management and Authentication
 Axiom - Health and Monitoring
+
+https://www.youtube.com/watch?v=YkOSUVzOAA4&t=3104s
+
+minute 50:00 says how to define types fetched from the api
