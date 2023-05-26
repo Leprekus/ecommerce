@@ -1,4 +1,5 @@
 'use client'
+import { TRPCError } from '@trpc/server'
 import React from 'react'
 import { api } from '~/utils/api'
 
@@ -9,10 +10,11 @@ export default function Products() {
     console.log(product.data)
   return (
     <div>
-        {product.data?.map((data) => 
-      <div key={data.id}>
+        {product.data?.map((data) => {
+          if(!data) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Data for Product not found'})
+      return(<div key={data.id}>
         <p>{data.name}</p>
-      </div>)}
+      </div>)})}
     </div>
   )
 }
