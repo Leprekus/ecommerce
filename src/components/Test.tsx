@@ -5,7 +5,7 @@ import { SignOutButton } from "@clerk/clerk-react";
 
 export default function Test() {
   const user = useUser();
-  
+
   return (
     <div>
       <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
