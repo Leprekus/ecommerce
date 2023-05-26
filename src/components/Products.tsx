@@ -2,12 +2,15 @@
 import { TRPCError } from '@trpc/server'
 import React from 'react'
 import { api } from '~/utils/api'
+import Loading from './Loading'
 
 export default function Products() {
     const product = api.product.getAll.useQuery()
     //when hovering this should match the prisma model its referring to
     product.data
     console.log(product.data)
+  
+  if(product.isLoading) return <Loading/>
   return (
     <div>
         {product.data?.map((data) => {
