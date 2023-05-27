@@ -9,10 +9,13 @@ interface IProductForm {
     image: string,
 
 }
-export default function CreateProduct({ selectedProductId }: { selectedProductId?: null | number}) {
+export default function CreateProduct({ selectedProductId, setSelectedProduct }: { selectedProductId?: null | number, setSelectedProduct: (id: null | number) => void }) {
+    
     const { user } = useUser()
 
     const { mutate } = api.product.create.useMutation()
+
+    const update = api.product.update.useMutation()
     // const { 
     //     data: selectedProduct,
     //     error: selectedProductError,
@@ -40,7 +43,14 @@ export default function CreateProduct({ selectedProductId }: { selectedProductId
             
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault()
-       mutate(productForm)
+
+       if(selectedProductId) {
+        update.mutate({ id: selectedProductId, ...productForm})
+        setSelectedProduct(null)
+       }
+       if(!selectedProductId) {
+           mutate(productForm)
+       }
        setProductForm(initialProductForm)
 
     }
@@ -80,7 +90,7 @@ export default function CreateProduct({ selectedProductId }: { selectedProductId
             <input required onChange={(event) =>  handleSetProductForm(event, 'description')} value={productForm.description} name='description' placeholder='description' type="text" />
             <input required onChange={(event) =>  handleSetProductForm(event, 'price')} value={productForm.price} name='price' placeholder='price' type="number" />
             <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
-            <button type='submit'>Create</button>
+            <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>
     </div> 
   )

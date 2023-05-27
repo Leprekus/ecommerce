@@ -8,7 +8,7 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
         <ProductsList setSelectedProductId={setSelectedProductId}/>
-        <CreateProduct selectedProductId={selectedProductId}/>
+        <CreateProduct selectedProductId={selectedProductId} setSelectedProduct={setSelectedProductId}/>
     </DashboardLayout>
   )
 }

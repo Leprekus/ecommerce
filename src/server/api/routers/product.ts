@@ -39,6 +39,7 @@ export const productRouter = createTRPCRouter({
     const userId = ctx.userId;
     //const categories = await prisma.category.findMany()
 
+    
     const post = await ctx.prisma.product.create({
       data: {
         name: input.name,
@@ -49,6 +50,35 @@ export const productRouter = createTRPCRouter({
         }
       })
     }),
+  update: privateProcedure
+  .input((
+    z.object({
+        id: z.number(),
+        name: z.string().max(100),
+        description: z.string().max(1000),
+        price: z.number().max(1000000),
+        image: z.string().max(200),
+    })
+  ))
+  .mutation(async ({ ctx, input }) => {
+    const userId = ctx.userId;
+    //const categories = await prisma.category.findMany()
+    
+    await ctx.prisma.product.update({
+      where: {
+        id: input.id
+      },
+      data: {
+        id: input.id,
+        name: input.name,
+        description: input.description,
+        price: input.price,
+        image: input.image,
+       // categories,
+        }
+      })
+    }),
+    
   getUnique: publicProcedure
   .input( 
     z.object({
