@@ -1,7 +1,8 @@
 import { clerkClient } from "@clerk/nextjs";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
+import { prisma } from "~/server/db";
 
 //making the function async allows you to process the request
 export const productRouter = createTRPCRouter({
@@ -21,4 +22,28 @@ export const productRouter = createTRPCRouter({
     // }))
     return products
   }),
+  create: privateProcedure
+  .input((
+    z.object({
+        name: z.string().max(100),
+        description: z.string().max(1000),
+        price: z.number().max(20),
+        image: z.string().max(200),
+    })
+  ))
+  .mutation(async ({ ctx, input }) => {
+    const authorId = ctx.currentUser.id;
+    //const categories = await prisma.category.findMany()
+
+    const post = await ctx.prisma.product.create({
+      data: {
+        name: input.name,
+        description: input.description,
+        price: input.price,
+        image: input.image,
+       // categories,
+      }
+    })
+
+  })
 });
