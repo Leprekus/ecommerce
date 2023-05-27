@@ -1,4 +1,5 @@
 import { clerkClient } from "@clerk/nextjs";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
@@ -45,8 +46,25 @@ export const productRouter = createTRPCRouter({
         price: input.price,
         image: input.image,
        // categories,
+        }
+      })
+    }),
+  getUnique: publicProcedure
+  .input( 
+    z.object({
+      id: z.number()
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    const product = await prisma.product.findUnique({ 
+      where: {
+        id: input.id
       }
     })
+    if(!product) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Product Not Found'})
+    
+    return product
 
   })
+
 });

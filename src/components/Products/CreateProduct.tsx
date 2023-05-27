@@ -1,11 +1,32 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { api } from '~/utils/api'
 
-export default function CreateProduct() {
+interface IProductForm {
+    name:  string;
+    description: string;
+    price: number,
+    image: string,
+
+}
+export default function CreateProduct({ selectedProductId }: { selectedProductId?: null | number}) {
     const { user } = useUser()
 
     const { mutate } = api.product.create.useMutation()
+    // const { 
+    //     data: selectedProduct,
+    //     error: selectedProductError,
+    //     isFetching: isFetchingSelectedProduct
+    // } = useQuery()
+    
+     const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
+
+    useEffect(() => {
+        if(product.data) {
+            setProductForm(product.data as IProductForm)
+        }
+    },[product.data])
+    
     const initialProductForm = {
         name: '',
         description: '',
@@ -16,8 +37,7 @@ export default function CreateProduct() {
     const [productForm, setProductForm] = useState(initialProductForm)
 
     if(!user) return null 
-
-
+            
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault()
        mutate(productForm)
