@@ -8,7 +8,10 @@ import { prisma } from "~/server/db";
 export const productRouter = createTRPCRouter({
   getAll: publicProcedure.query(async({ ctx }) => {
     const products = await ctx.prisma.product.findMany(
-      // { take: 100, where: { authorId: 'xxxx'} }
+       { 
+        //take: 100, where: { authorId: 'xxxx'}
+        orderBy: [{ createdAt: 'desc' }]
+     }
     );
 
     //creates a relation between product and user
