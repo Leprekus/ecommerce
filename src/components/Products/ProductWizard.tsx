@@ -9,7 +9,7 @@ interface IProductForm {
     image: string,
 
 }
-export default function CreateProduct({ selectedProductId, setSelectedProduct }: { selectedProductId?: null | number, setSelectedProduct: (id: null | number) => void }) {
+export default function ProductWizard({ selectedProductId, setSelectedProduct }: { selectedProductId?: null | number, setSelectedProduct: (id: null | number) => void }) {
     
     const { user } = useUser()
 

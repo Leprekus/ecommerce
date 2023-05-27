@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import CreateProduct from "~/components/Products/CreateProduct";
+import CreateProduct from "~/components/Products/ProductWizard";
 import Products from "~/components/Products";
 import Test from "~/components/Test";
 

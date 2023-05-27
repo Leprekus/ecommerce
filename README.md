@@ -7,6 +7,10 @@ Permissions and Roles: Auth State is attached to TRPC context inside of each que
 ## TRPC
 Allows you to create server functions. These functions run on vercel and they allow data fetching without having the user connect to the data base.
 
+Private Procedures: handling sensitive data limited to authenticated users
+
+Public Procedures: available for anyone, reserved for general operations like searching, etc.
+
 ## Techstack
 
 Next.JS - Framework
