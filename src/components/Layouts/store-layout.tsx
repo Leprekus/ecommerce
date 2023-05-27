@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-export default function StoreLayout() {
+export default function StoreLayout({ children }: { children: ReactNode }) {
   return (
-    <div>main-layout</div>
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      { children }
+    </main>
   )
 }
