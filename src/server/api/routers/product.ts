@@ -27,12 +27,12 @@ export const productRouter = createTRPCRouter({
     z.object({
         name: z.string().max(100),
         description: z.string().max(1000),
-        price: z.number().max(20),
+        price: z.number().max(1000000),
         image: z.string().max(200),
     })
   ))
   .mutation(async ({ ctx, input }) => {
-    const authorId = ctx.currentUser.id;
+    const userId = ctx.userId;
     //const categories = await prisma.category.findMany()
 
     const post = await ctx.prisma.product.create({

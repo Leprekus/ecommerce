@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
+import CreateProduct from "~/components/CreateProduct";
 import Products from "~/components/Products";
 import Test from "~/components/Test";
 
@@ -22,6 +23,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center">
        <Test/>
        <Products/>
+       <CreateProduct/>
       </main>
     </>
   );
