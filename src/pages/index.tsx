@@ -2,12 +2,11 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
-import CreateProduct from "~/components/Products/ProductWizard";
 import Products from "~/components/Products";
-import Test from "~/components/Test";
 
 import { api } from "~/utils/api";
 import StoreLayout from "~/components/Layouts/store-layout";
+import User from "~/components/User";
 
 
 const Home: NextPage = () => {
@@ -22,7 +21,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StoreLayout>
-       <Test/>
+       <User/>
        <Products/>
       </StoreLayout>
     </>

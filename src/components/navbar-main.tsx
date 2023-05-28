@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import List from './List'
 import HoverMenu from './hover-menu'
+import User from './User'
 
 export default function NavbarMain() {
   return (
@@ -10,7 +11,7 @@ export default function NavbarMain() {
             <Image src='https://cdn.shopify.com/s/files/1/0702/9579/files/Petland_Canada_white_8dcf7ab2-89ef-4f11-af2b-8b3650511386_175x.png?v=1681105249' width={200} height={200} alt='logo'/>
             <div className='flex gap-4'>
                 <p>search</p>
-                <p>account</p>
+                <User/>
                 <p>cart</p>
             </div>
         </div>

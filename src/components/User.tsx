@@ -2,8 +2,9 @@
 import React from "react";
 import { SignIn, SignInButton, useClerk, useUser } from "@clerk/nextjs";
 import { SignOutButton } from "@clerk/clerk-react";
+import Link from "next/link";
 
-export default function Test() {
+export default function User() {
   const user = useUser();
 
   return (
@@ -12,7 +13,7 @@ export default function Test() {
       {
         user.isSignedIn ? 
         <>
-        <p>Welcome {user.user?.firstName}</p>
+        <p>{user.user?.firstName}&apos;s <Link href='/dashboard'>Dashboard</Link></p>
         <SignOutButton/>
         </>:
         <SignInButton />
