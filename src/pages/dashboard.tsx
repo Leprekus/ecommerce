@@ -19,6 +19,7 @@ export default function Dashboard() {
     <DashboardLayout>
         <ProductsList setSelectedProductId={setSelectedProductId}/>
         <CreateProduct selectedProductId={selectedProductId} setSelectedProduct={setSelectedProductId}/>
+        
     </DashboardLayout>
   )
 }
