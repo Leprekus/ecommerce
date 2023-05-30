@@ -90,6 +90,7 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
             <input required onChange={(event) =>  handleSetProductForm(event, 'description')} value={productForm.description} name='description' placeholder='description' type="text" />
             <input required onChange={(event) =>  handleSetProductForm(event, 'price')} value={productForm.price} name='price' placeholder='price' type="number" />
             <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
+            <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
             <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>
     </div> 
