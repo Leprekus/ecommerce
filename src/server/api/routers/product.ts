@@ -40,7 +40,7 @@ export const productRouter = createTRPCRouter({
     //const categories = await prisma.category.findMany()
 
     
-    const post = await ctx.prisma.product.create({
+    const product = await ctx.prisma.product.create({
       data: {
         name: input.name,
         description: input.description,
@@ -49,6 +49,9 @@ export const productRouter = createTRPCRouter({
        // categories,
         }
       })
+
+    return product 
+    
     }),
   update: privateProcedure
   .input((
