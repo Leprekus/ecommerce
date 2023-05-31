@@ -1,5 +1,6 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
 import React, { useState } from 'react'
+import CategoryWizard from '~/components/Categories/CategoryWizard'
 import DashboardLayout from '~/components/Layouts/dashboard-layout'
 import CreateProduct from '~/components/Products/ProductWizard'
 import ProductsList from '~/components/Products/ProductsList'
@@ -19,7 +20,7 @@ export default function Dashboard() {
     <DashboardLayout>
         <ProductsList setSelectedProductId={setSelectedProductId}/>
         <CreateProduct selectedProductId={selectedProductId} setSelectedProduct={setSelectedProductId}/>
-        
+        <CategoryWizard/>
     </DashboardLayout>
   )
 }
