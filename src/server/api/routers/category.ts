@@ -1,6 +1,9 @@
+import { TRPCError } from "@trpc/server";
+import { error } from "console";
+import { connect } from "http2";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
 
 export const categoryRouter = createTRPCRouter({
   hello: publicProcedure
@@ -12,5 +15,51 @@ export const categoryRouter = createTRPCRouter({
     }),
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany();
+  }),
+  search: privateProcedure
+  .input(
+    z.object({
+      query: z.string().max(128)
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    
+    const categories = await ctx.prisma.category.findMany({
+      where:{
+        name: {
+          contains: input.query
+        }
+      }
+    });
+
+    return categories
+  }),
+  create: privateProcedure
+  .input( z.object({ 
+    name: z.string().max(128),
+    productId: z.number()
+   }))
+  .query(async ({ ctx, input }) => {
+    const product = await ctx.prisma.product.findUnique({
+      where: {
+        id: input.productId
+      }
+    })
+
+    if(product) {
+      const category = await ctx.prisma.category.create({
+        data: {
+          name: input.name,
+          products: { connect: product }
+        },
+        include: {
+          products: true
+        }
+      })
+
+      return category
+      
+    }
+    return new TRPCError({ code: 'NOT_FOUND', message: 'Product Not Found' })
   }),
 });

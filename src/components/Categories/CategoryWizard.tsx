@@ -1,12 +1,23 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { api } from '~/utils/api'
 
 export default function CategoryWizard() {
     //search category
     //create category
     //pick categor
-    const { data: categories } = api.category.getAll.useQuery()
     const [value, setValue] = useState('')
+    const { data } = api.category.getAll.useQuery()
+    const { data: queriedCategories } = api.category.search.useQuery({ query: value })
+    //const { mutation } = api.category.
+    const [categories, setCategories] = useState(data || [])
+    
+    queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
+    const handleAdd = () => {
+
+        if(!queriedCategories || queriedCategories.length === 0) {
+          
+        }
+    }
   return (
     <div>CategoryWizard
         <input onChange={(event) => setValue(event.target.value)} value={value} placeholder='Add Categories'/>
@@ -16,7 +27,7 @@ export default function CategoryWizard() {
          )):
          <p>No categories found</p>
         }
-        <button>Add</button>
+        <button onClick={handleAdd}>Add</button>
     </div>
   )
 }
