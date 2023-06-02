@@ -39,7 +39,7 @@ export const categoryRouter = createTRPCRouter({
     name: z.string().max(128),
     productId: z.number()
    }))
-  .query(async ({ ctx, input }) => {
+  .mutation(async ({ ctx, input }) => {
     const product = await ctx.prisma.product.findUnique({
       where: {
         id: input.productId
