@@ -11,7 +11,8 @@ export const productRouter = createTRPCRouter({
     const products = await ctx.prisma.product.findMany(
        { 
         //take: 100, where: { authorId: 'xxxx'}
-        orderBy: [{ createdAt: 'desc' }]
+        orderBy: [{ createdAt: 'desc' }],
+        include: { categories: true }
      }
     );
 
@@ -51,6 +52,9 @@ export const productRouter = createTRPCRouter({
         price: input.price,
         image: input.image,
         //categories,
+        },
+        include: {
+          categories: true
         }
       })
 

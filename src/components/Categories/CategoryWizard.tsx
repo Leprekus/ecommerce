@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { api } from '~/utils/api'
 
 export default function CategoryWizard({ selectedProductId }: { selectedProductId: null | number }) {
@@ -11,20 +11,24 @@ export default function CategoryWizard({ selectedProductId }: { selectedProductI
     const { mutate } = api.category.create.useMutation()
     //const { mutation } = api.category.
     const [categories, setCategories] = useState(data || [])
+    useEffect(() => {
+      queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
+    }, [queriedCategories, queriedCategories?.length])
     
-    queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
     const handleAdd = () => {
 
         if(!queriedCategories || queriedCategories.length === 0) {
+          console.log('ran')
           selectedProductId && mutate({ name: value, productId: selectedProductId }) 
+          console.log('finished')
         }
     }
   return (
-    <div>CategoryWizard
+    <div className='flex flex-col'>CategoryWizard
         <input onChange={(event) => setValue(event.target.value)} value={value} placeholder='Add Categories'/>
         {categories?.length ? 
          categories?.map(category => (
-            <div key={category.id}>{category.name}</div>
+            <span key={category.id} className='p-1 rounded-md bg-indigo-400'>{category.name}</span>
          )):
          <p>No categories found</p>
         }

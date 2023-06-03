@@ -50,14 +50,21 @@ export const categoryRouter = createTRPCRouter({
       const category = await ctx.prisma.category.create({
         data: {
           name: input.name,
-          products: { connect: product }
+          products: {
+            create: [
+              {
+                // product: {
+                //   connect: product,
+                // },
+                productId: product.id
+              }
+            ]
+          }
         },
-        include: {
-          products: true
-        }
       })
 
       return category
+  
       
     }
     return new TRPCError({ code: 'NOT_FOUND', message: 'Product Not Found' })

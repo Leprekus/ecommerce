@@ -1,12 +1,13 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
 import { api } from '~/utils/api'
 
 interface IProductForm {
-    name:  string;
+    name: string; 
     description: string;
-    price: number,
-    image: string,
+    price: number;
+    image: string;
+    //categories: any; 
 
 }
 export default function ProductWizard({ selectedProductId, setSelectedProduct }: { selectedProductId?: null | number, setSelectedProduct: (id: null | number) => void }) {
@@ -35,6 +36,7 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
         description: '',
         price: 0,
         image: '',
+        //categories: never[]
 
     }
     const [productForm, setProductForm] = useState(initialProductForm)
@@ -93,7 +95,7 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
             <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
             
             <p className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4'>
-                Categories: </p>
+                Categories:</p>
             <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>
     </div> 
