@@ -53,10 +53,10 @@ export const categoryRouter = createTRPCRouter({
           products: {
             create: [
               {
-                // product: {
-                //   connect: product,
-                // },
-                productId: product.id
+                product: {
+                  connect: { id: product.id },
+                },
+                //productId: product.id
               }
             ]
           }

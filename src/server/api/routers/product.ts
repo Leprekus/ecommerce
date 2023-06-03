@@ -97,13 +97,36 @@ export const productRouter = createTRPCRouter({
     })
   )
   .query(async ({ ctx, input }) => {
+
     const product = await prisma.product.findUnique({ 
       where: {
-        id: input.id
-      }
+        id: input.id,
+      },
+      include: { categories: true }
     })
+
     if(!product) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Product Not Found'})
     
+    if(product?.categories) {
+
+      const categoriesIds = product.categories.map(({ categoryId }) => { 
+       if(!categoryId) {
+         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Category Not Found' })
+       }
+       return categoryId
+     })
+
+     const categories = await ctx.prisma.category.findMany({
+       where: { id: { in: categoriesIds } }
+     })
+
+     return {
+      ...product,
+      categories,
+     }
+
+    }
+
     return product
 
   })

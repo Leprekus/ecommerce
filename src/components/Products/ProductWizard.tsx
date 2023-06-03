@@ -24,7 +24,7 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
     // } = useQuery()
     
      const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
-
+    
     useEffect(() => {
         if(product.data) {
             setProductForm(product.data as IProductForm)
@@ -85,6 +85,7 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
         }
     }
 
+  console.log(product.data?.categories)
   return (
     <div>
         <form onSubmit={handleSubmit} className='flex flex-col w-96 h-96 gap-4'>

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 
 export default function CategoryWizard({ selectedProductId }: { selectedProductId: null | number }) {
@@ -11,9 +11,12 @@ export default function CategoryWizard({ selectedProductId }: { selectedProductI
     const { mutate } = api.category.create.useMutation()
     //const { mutation } = api.category.
     const [categories, setCategories] = useState(data || [])
-    useEffect(() => {
-      queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
-    }, [queriedCategories, queriedCategories?.length])
+    useMemo(() => {
+      queriedCategories && setCategories(prev => [...queriedCategories, ...prev])
+    }, [queriedCategories?.length])
+    // useEffect(() => {
+    //   queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
+    // }, [queriedCategories?.length])
     
     const handleAdd = () => {
 
