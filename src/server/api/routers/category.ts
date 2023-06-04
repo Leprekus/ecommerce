@@ -69,4 +69,44 @@ export const categoryRouter = createTRPCRouter({
     }
     return new TRPCError({ code: 'NOT_FOUND', message: 'Product Not Found' })
   }),
+  connect: privateProcedure
+  .input( 
+    z.object({ 
+      productId: z.number(),
+      categoryId: z.number()
+   }))
+  .mutation(async ({ ctx, input }) => {
+    const product = await ctx.prisma.product.findUnique({
+      where: {
+        id: input.productId
+      }
+    })
+
+    if(product) {
+      const updatedCategory = await ctx.prisma.category.update({
+        where : {
+          id: input.categoryId ,
+        },
+        data: {
+        products: {
+          create: [
+            {
+              product: {
+                connect: { id: product.id },
+              },
+              //productId: product.id
+            }
+          ]
+        }
+        },
+      
+    
+      })
+
+      return updatedCategory
+  
+      
+    }
+    return new TRPCError({ code: 'NOT_FOUND', message: 'Product Not Found' })
+  }),
 });
