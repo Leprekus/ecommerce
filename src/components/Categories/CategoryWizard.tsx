@@ -1,11 +1,16 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { useCategoriesActions } from '~/stores/categories-store'
+import { useSelectCurrentProduct } from '~/stores/products-store'
 import { type RouterOutputs, api } from '~/utils/api'
 
 type Categories = RouterOutputs['category']['getAll'][number]
-export default function CategoryWizard({ selectedProductId }: { selectedProductId: null | number }) {
+export default function CategoryWizard() {
     //search category
     //create category
     //pick categor
+    const selectedProductId = useSelectCurrentProduct()
+    const { addToCategories } = useCategoriesActions()
+
     const [value, setValue] = useState('')
     const { data } = api.category.getAll.useQuery()
     const { data: queriedCategories } = api.category.search.useQuery({ query: value })
@@ -23,9 +28,6 @@ export default function CategoryWizard({ selectedProductId }: { selectedProductI
       }
       queriedCategories && setCategories(prev => [...new Set<Categories>([...queriedCategories, ...prev])]);
     }, [queriedCategories?.length])
-    // useEffect(() => {
-    //   queriedCategories?.length && setCategories(prev => [...queriedCategories, ...prev])
-    // }, [queriedCategories?.length])
     
     const handleAdd = () => {
 
@@ -43,19 +45,20 @@ export default function CategoryWizard({ selectedProductId }: { selectedProductI
         }
     }
   return (
-    <div className='flex flex-col'>CategoryWizard
-        <input onChange={(event) => setValue(event.target.value)} value={value} placeholder='Add Categories'/>
+    <div className='flex flex-wrap justify-between w-44 gap-1'>CategoryWizard
+        <input className='min-w-full'
+         onChange={(event) => setValue(event.target.value)} value={value} placeholder='Add Categories'/>
 
         {categories?.length ? 
          categories?.map(category => (
             <button key={category.id} 
-            onClick={() => null}
-            className='p-1 rounded-md bg-indigo-400'>{category.name}</button>
+            onClick={() => addToCategories(category)}
+            className='py-1 px-2 rounded-sm bg-indigo-400 bg-opacity-20 w-fit'>{category.name}</button>
          )):
          <p>No categories found</p>
         }
-        <button onClick={handleAdd} 
-        className={selectedProductId ? '' : 'cursor-not-allowed text-gray-400'}
+        <button onClick={handleAdd} title={selectedProductId ? '' : 'Select a product to add a category'}
+        className={`min-w-full text-center transition-all py-0.5 ${selectedProductId && value ? 'bg-gray-100 rounded-sm' : 'cursor-not-allowed text-gray-400'}`}
         disabled={selectedProductId ? false : true}>Add</button>
     </div>
   )
