@@ -1,6 +1,6 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
-import { api } from '~/utils/api'
+import { RouterOutputs, api } from '~/utils/api'
 
 interface IProductForm {
     name: string; 
@@ -10,6 +10,7 @@ interface IProductForm {
     //categories: any; 
 
 }
+
 export default function ProductWizard({ selectedProductId, setSelectedProduct }: { selectedProductId?: null | number, setSelectedProduct: (id: null | number) => void }) {
     
     const { user } = useUser()
@@ -95,10 +96,14 @@ export default function ProductWizard({ selectedProductId, setSelectedProduct }:
             <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
             <input required onChange={(event) =>  handleSetProductForm(event, 'image')} value={productForm.image} name='image' placeholder='image' type="text" />
             
-            <p className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4'>
-                Categories:</p>
+            <div className='w-56 bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm p-4 flex flex-wrap gap-1'>
+                <p className='w-fit text-amber-900 py-1 px-4 font-semibold'>Categories: </p>
+                { product.data?.categories.map((category) => <span className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4' key={category.id}>{category.name}</span>)}
+                </div>
             <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>
     </div> 
+
+    
   )
 }
