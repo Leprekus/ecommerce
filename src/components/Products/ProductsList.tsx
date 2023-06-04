@@ -4,7 +4,7 @@ import Loading from '../Loading';
 import { useProductActions } from '~/stores/products-store';
 
 export default function ProductsList() {
-  const { setCurrentProduct:setSelectedProductId } = useProductActions()
+  const { setCurrentProduct } = useProductActions()
  
 
   const products = api.product.getAll.useQuery();
@@ -16,7 +16,7 @@ export default function ProductsList() {
    
       {products.data?.map((data) => (
         <button key={data.id} 
-        onClick={() => setSelectedProductId(data.id)}
+        onClick={() => setCurrentProduct(data.id)}
         className='h-10 py-2 bg-red-50 text-center rounded-sm transition-all hover:bg-red-100'>
           <p>{data.name}</p>
         </ button>

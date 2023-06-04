@@ -15,7 +15,7 @@ interface IProductForm {
 export default function ProductWizard() {
     
     const selectedProductId = useSelectCurrentProduct()
-    const { setCurrentProduct: setSelectedProduct} = useProductActions()
+    const { setCurrentProduct } = useProductActions()
     
     const { user } = useUser()
 
@@ -53,7 +53,7 @@ export default function ProductWizard() {
 
        if(selectedProductId) {
         update.mutate({ id: selectedProductId, ...productForm})
-        setSelectedProduct(null)
+        setCurrentProduct(null)
        }
        if(!selectedProductId) {
            mutate(productForm)
