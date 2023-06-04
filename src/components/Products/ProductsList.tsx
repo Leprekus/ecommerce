@@ -1,10 +1,10 @@
 import React from 'react';
 import { api } from '~/utils/api';
 import Loading from '../Loading';
-import { dispatchSetCurrentProduct } from '~/stores/products-store';
+import { useProductActions } from '~/stores/products-store';
 
 export default function ProductsList() {
-  const setSelectedProductId = dispatchSetCurrentProduct
+  const { setCurrentProduct:setSelectedProductId } = useProductActions()
  
 
   const products = api.product.getAll.useQuery();

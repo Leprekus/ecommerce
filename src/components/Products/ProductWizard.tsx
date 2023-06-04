@@ -1,6 +1,6 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
-import { dispatchSetCurrentProduct, selectCurrentProduct } from '~/stores/products-store';
+import { useProductActions, useSelectCurrentProduct } from '~/stores/products-store';
 import { RouterOutputs, api } from '~/utils/api'
 
 interface IProductForm {
@@ -14,8 +14,8 @@ interface IProductForm {
 
 export default function ProductWizard() {
     
-    const selectedProductId = selectCurrentProduct()
-    const setSelectedProduct = dispatchSetCurrentProduct
+    const selectedProductId = useSelectCurrentProduct()
+    const { setCurrentProduct: setSelectedProduct} = useProductActions()
     
     const { user } = useUser()
 
