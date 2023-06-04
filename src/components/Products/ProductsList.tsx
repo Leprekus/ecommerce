@@ -1,8 +1,12 @@
 import React from 'react';
 import { api } from '~/utils/api';
 import Loading from '../Loading';
+import { dispatchSetCurrentProduct } from '~/stores/products-store';
 
-export default function ProductsList({ setSelectedProductId }: { setSelectedProductId: (id: number) => void }) {
+export default function ProductsList() {
+  const setSelectedProductId = dispatchSetCurrentProduct
+ 
+
   const products = api.product.getAll.useQuery();
   if (products.isLoading) return <Loading />;
   if (!products.data) return null;

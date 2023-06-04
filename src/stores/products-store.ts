@@ -5,8 +5,7 @@ interface ProductsStore {
   products: object[] | [];
   currentProduct: number | null;
   addToProducts: (product: object) => void
-  setCurrentProduct: (id: number) => void;
-  removeCurrentProduct: () => void;
+  setCurrentProduct: (id: number | null) => void;
 
 }
 
@@ -14,8 +13,7 @@ const useProductsStore = create<ProductsStore>()((set) => ({
   products: [],
   currentProduct: null,
   addToProducts: (product: object) => set((state) => ({ products: [product, ...state.products] })),
-  setCurrentProduct: (id: number) => set((state) => ({ currentProduct: id })),
-  removeCurrentProduct: () => set((state) => ({ currentProduct: null })),
+  setCurrentProduct: (id: number | null) => set((state) => ({ currentProduct: id })),
 
 }))
 
@@ -26,4 +24,3 @@ export const selectCurrentProduct = () => useProductsStore.getState().currentPro
 //actions
 export const dispatchAddToProducts = useProductsStore.getState().addToProducts
 export const dispatchSetCurrentProduct = useProductsStore.getState().setCurrentProduct
-export const dispatchRemoveCurrentProduct = useProductsStore.getState().removeCurrentProduct

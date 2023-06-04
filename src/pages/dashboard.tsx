@@ -18,8 +18,8 @@ export default function Dashboard() {
     console.log({organization})
   return (
     <DashboardLayout>
-        <ProductsList setSelectedProductId={setSelectedProductId}/>
-        <CreateProduct selectedProductId={selectedProductId} setSelectedProduct={setSelectedProductId}/>
+        <ProductsList/>
+        <CreateProduct />
         <CategoryWizard selectedProductId={selectedProductId}/>
     </DashboardLayout>
   )
