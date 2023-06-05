@@ -14,7 +14,7 @@ const useCategoriesStore = create<CategoriesStore>()((set) => ({
     categories: [],
     currentCategory: null,
     actions: {
-        addToCategories: (category: object) => set((state) => ({ categories: [category, state.categories]})),
+        addToCategories: (category: object) => set((state) => ({ categories: [category, ...state.categories]})),
         setCurrentCategory: (id: number) => set((state) => ({ currentCategory: id })),
         removeCurrentCategory: () => set((state) => ({ currentCategory: null })),
     }

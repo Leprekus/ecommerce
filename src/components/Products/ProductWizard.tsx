@@ -33,6 +33,7 @@ export default function ProductWizard() {
     
      const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
      
+     console.log({ clientCategories})
      const categories =  product?.data?.categories ? [...clientCategories,  ...product?.data?.categories] : clientCategories
     
     useEffect(() => {
