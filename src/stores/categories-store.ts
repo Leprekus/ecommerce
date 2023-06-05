@@ -21,8 +21,8 @@ const useCategoriesStore = create<CategoriesStore>()((set) => ({
   }))
 
   //selectors
-  export const useSelectCategories = () => useCategoriesStore(state => state.categories)
-  export const useSelectCurrentCategory = () => useCategoriesStore.getState().currentCategory
+  export const useCategories = () => useCategoriesStore(state => state.categories)
+  export const useCurrentCategory = () => useCategoriesStore.getState().currentCategory
 
   //actions
   export const useCategoriesActions = () => useCategoriesStore(state => state.actions)

@@ -1,5 +1,6 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
+import { useCategories } from '~/stores/categories-store';
 import { useProductActions, useSelectCurrentProduct } from '~/stores/products-store';
 import { RouterOutputs, api } from '~/utils/api'
 
@@ -15,6 +16,8 @@ interface IProductForm {
 export default function ProductWizard() {
     
     const selectedProductId = useSelectCurrentProduct()
+    const clientCategories = useCategories()
+
     const { setCurrentProduct } = useProductActions()
     
     const { user } = useUser()
@@ -29,6 +32,8 @@ export default function ProductWizard() {
     // } = useQuery()
     
      const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
+     
+     const categories =  product?.data?.categories ? [...clientCategories,  ...product?.data?.categories] : clientCategories
     
     useEffect(() => {
         if(product.data) {
@@ -90,7 +95,7 @@ export default function ProductWizard() {
         }
     }
 
-  console.log(product.data?.categories)
+
   return (
     <div>
         <form onSubmit={handleSubmit} className='flex flex-col w-96 h-96 gap-4'>
@@ -102,7 +107,7 @@ export default function ProductWizard() {
             
             <div className='w-56 bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm p-4 flex flex-wrap gap-1'>
                 <p className='w-fit text-amber-900 py-1 px-4 font-semibold'>Categories: </p>
-                { product.data?.categories.map((category) => <span className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4' key={category.id}>{category.name}</span>)}
+                { categories.length > 0 && categories.map((category) => <span className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4' key={category.id + 'product'}>{category.name}</span>)}
                 </div>
             <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>
