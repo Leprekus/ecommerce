@@ -1,10 +1,13 @@
 import { create } from 'zustand'
+import { type RouterOutputs } from '~/utils/api';
 
+type Category = RouterOutputs['category']['getAll'][number]
 interface CategoriesStore {
-    categories: object[] | [];
+    categories: Category[] | [];
     currentCategory: number | null;
     actions: {
-        addToCategories: (category: object) => void;
+        addToCategories: (category: Category) => void;
+        setCategories: (category: Category[]) => void;
         setCurrentCategory: (id: number) => void;
         removeCurrentCategory: () => void;
     }
@@ -14,7 +17,8 @@ const useCategoriesStore = create<CategoriesStore>()((set) => ({
     categories: [],
     currentCategory: null,
     actions: {
-        addToCategories: (category: object) => set((state) => ({ categories: [category, ...state.categories]})),
+        addToCategories: (category: Category) => set((state) => ({ categories: [category, ...state.categories]})),
+        setCategories: (category: Category[]) => set((state) => ({ categories: [...category]})),
         setCurrentCategory: (id: number) => set((state) => ({ currentCategory: id })),
         removeCurrentCategory: () => set((state) => ({ currentCategory: null })),
     }

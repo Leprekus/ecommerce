@@ -1,6 +1,6 @@
 import { useOrganization, useUser } from '@clerk/nextjs'
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
-import { useCategories } from '~/stores/categories-store';
+import { useCategories, useCategoriesActions } from '~/stores/categories-store';
 import { useProductActions, useSelectCurrentProduct } from '~/stores/products-store';
 import { RouterOutputs, api } from '~/utils/api'
 
@@ -13,12 +13,14 @@ interface IProductForm {
 
 }
 
+type Category = RouterOutputs['category']['getAll'][number]
 export default function ProductWizard() {
     
     const selectedProductId = useSelectCurrentProduct()
-    const clientCategories = useCategories()
+    const productCategories = useCategories()
 
     const { setCurrentProduct } = useProductActions()
+    const { setCategories } = useCategoriesActions()
     
     const { user } = useUser()
 
@@ -33,8 +35,8 @@ export default function ProductWizard() {
     
      const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
      
-     console.log({ clientCategories})
-     const categories =  product?.data?.categories ? [...clientCategories,  ...product?.data?.categories] : clientCategories
+     console.log({ productCategories})
+     const categories =  product?.data?.categories ? [...productCategories,  ...product?.data?.categories] as Category[] : productCategories
     
     useEffect(() => {
         if(product.data) {

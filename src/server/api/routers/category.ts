@@ -16,6 +16,40 @@ export const categoryRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany();
   }),
+  getSome: privateProcedure.input(
+    z.object({
+      productId: z.number()
+    })
+  )
+  .query(async ({ ctx, input }) => {
+
+    const product = await ctx.prisma.product.findUnique({
+      where: {
+        id: input.productId,
+      },
+      include: {
+        categories: true
+      }
+    })
+
+    if(product?.categories) {
+      const categoriesContainingProduct = product.categories.map(p => p.categoryId)
+      
+      const filteredCategories = await ctx.prisma.category.findMany({
+        where: {
+          id: {
+            notIn: categoriesContainingProduct
+          }
+        }
+      })
+      console.log({ filteredCategories })
+      return filteredCategories
+    }
+    const categories = await ctx.prisma.category.findMany()
+    return categories
+
+    //return filteredCategories
+  }),
   search: privateProcedure
   .input(
     z.object({

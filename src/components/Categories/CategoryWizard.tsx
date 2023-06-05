@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { useCategoriesActions } from '~/stores/categories-store'
+import { useCategories, useCategoriesActions } from '~/stores/categories-store'
 import { useSelectCurrentProduct } from '~/stores/products-store'
 import { type RouterOutputs, api } from '~/utils/api'
 
@@ -10,32 +10,38 @@ export default function CategoryWizard() {
     //pick categor
     const selectedProductId = useSelectCurrentProduct()
     const { addToCategories } = useCategoriesActions()
+    const productCategories = useCategories()
 
     const [value, setValue] = useState('')
-    const { data } = api.category.getAll.useQuery()
+    const { data } = api.category.getSome.useQuery({ productId: selectedProductId! }, { enabled: !!selectedProductId })
+    console.log({ data })
     const { data: queriedCategories } = api.category.search.useQuery({ query: value })
     const { mutate } = api.category.create.useMutation()
     const { mutate: update } = api.category.connect.useMutation()
     //const { mutation } = api.category.
+  
     const [categories, setCategories] = useState<Categories[] | []>(data || [])
 
     useMemo(() => {
       if(queriedCategories) {
-        const mergedArray = [...queriedCategories, ...categories]
+        const mergedArray = [...queriedCategories, ...productCategories]
         const uniqueIds = Array.from(new Set(mergedArray.map(obj => obj.id)))
         const uniqueCategories = uniqueIds.map(id => mergedArray.find(obj => obj.id === id)) as Categories[];
         setCategories(uniqueCategories)
       }
-      queriedCategories && setCategories(prev => [...new Set<Categories>([...queriedCategories, ...prev])]);
-    }, [queriedCategories?.length])
+      if(data) {
+        setCategories(data)
+      }
+      //queriedCategories && setCategories(prev => [...new Set<Categories>([...queriedCategories, ...prev])]);
+    }, [queriedCategories?.length, data])
     
     const handleAdd = () => {
 
         //creates a new category
         if(!queriedCategories || queriedCategories.length === 0) {
-          console.log('ran')
+         
           selectedProductId && mutate({ name: value, productId: selectedProductId }) 
-          console.log('finished')
+          
           return
         }
         //adds existing category
@@ -43,6 +49,11 @@ export default function CategoryWizard() {
           const { id } =  queriedCategories[0]
           update({ productId: selectedProductId, categoryId: id })
         }
+    }
+    const handleSelectCategory = (category: Categories) => {
+      const newCategories = categories.filter(c => c.id !== category.id)
+      addToCategories(category)
+      setCategories(newCategories)
     }
   return (
     <div className='flex flex-wrap justify-between w-44 gap-1'>CategoryWizard
@@ -52,7 +63,7 @@ export default function CategoryWizard() {
         {categories?.length ? 
          categories?.map(category => (
             <button key={category.id} 
-            onClick={() => addToCategories(category)}
+            onClick={() => handleSelectCategory(category)}
             className='py-1 px-2 rounded-sm bg-indigo-400 bg-opacity-20 w-fit'>{category.name}</button>
          )):
          <p>No categories found</p>
