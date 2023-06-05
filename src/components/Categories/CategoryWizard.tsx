@@ -14,7 +14,6 @@ export default function CategoryWizard() {
 
     const [value, setValue] = useState('')
     const { data } = api.category.getSome.useQuery({ productId: selectedProductId! }, { enabled: !!selectedProductId })
-    console.log({ data })
     const { data: queriedCategories } = api.category.search.useQuery({ query: value })
     const { mutate } = api.category.create.useMutation()
     const { mutate: update } = api.category.connect.useMutation()
@@ -24,10 +23,19 @@ export default function CategoryWizard() {
 
     useMemo(() => {
       if(queriedCategories) {
-        const mergedArray = [...queriedCategories, ...productCategories]
-        const uniqueIds = Array.from(new Set(mergedArray.map(obj => obj.id)))
-        const uniqueCategories = uniqueIds.map(id => mergedArray.find(obj => obj.id === id)) as Categories[];
-        setCategories(uniqueCategories)
+        // const mergedArray = [...queriedCategories, ...productCategories]
+        // const uniqueIds = Array.from(new Set(mergedArray.map(obj => obj.id)))
+        // const uniqueCategories = uniqueIds.map(id => mergedArray.find(obj => obj.id === id)) as Categories[];
+        
+        const queriedCategoriesIds = queriedCategories.map(c => c.id)
+        const productCategoriesIds = productCategories.map(c => c.id)
+        const filteredIds = queriedCategoriesIds.filter(
+          (category) => !productCategoriesIds.includes(category)
+        );
+        const filteredQueriedCategories = queriedCategories.filter(obj => filteredIds.includes(obj.id))
+          console.log({ filteredQueriedCategories })
+        setCategories(filteredQueriedCategories)
+        return
       }
       if(data) {
         setCategories(data)
@@ -60,7 +68,7 @@ export default function CategoryWizard() {
         <input className='min-w-full'
          onChange={(event) => setValue(event.target.value)} value={value} placeholder='Add Categories'/>
 
-        {categories?.length ? 
+        {categories?.length > 0? 
          categories?.map(category => (
             <button key={category.id} 
             onClick={() => handleSelectCategory(category)}

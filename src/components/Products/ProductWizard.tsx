@@ -1,8 +1,9 @@
-import { useOrganization, useUser } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react'
-import { useCategories, useCategoriesActions } from '~/stores/categories-store';
+import { useCategories } from '~/stores/categories-store';
 import { useProductActions, useSelectCurrentProduct } from '~/stores/products-store';
-import { RouterOutputs, api } from '~/utils/api'
+import { type RouterOutputs, api } from '~/utils/api'
+import { CloseIcon } from '../icons';
 
 interface IProductForm {
     name: string; 
@@ -20,7 +21,6 @@ export default function ProductWizard() {
     const productCategories = useCategories()
 
     const { setCurrentProduct } = useProductActions()
-    const { setCategories } = useCategoriesActions()
     
     const { user } = useUser()
 
@@ -34,10 +34,13 @@ export default function ProductWizard() {
     // } = useQuery()
     
      const product = api.product.getUnique.useQuery({ id: selectedProductId! }, { enabled: !!selectedProductId })
-     
-     console.log({ productCategories})
-     const categories =  product?.data?.categories ? [...productCategories,  ...product?.data?.categories] as Category[] : productCategories
     
+    const mergedCategories = product.data?.categories ? [...product.data?.categories, ...productCategories] as Category[] : []
+    const filteredCategories = mergedCategories
+    .filter((category: Category, index: number, self: Category[]) => 
+    index === self.findIndex(i => i.id === category.id))
+
+
     useEffect(() => {
         if(product.data) {
             setProductForm(product.data as IProductForm)
@@ -110,7 +113,11 @@ export default function ProductWizard() {
             
             <div className='w-56 bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm p-4 flex flex-wrap gap-1'>
                 <p className='w-fit text-amber-900 py-1 px-4 font-semibold'>Categories: </p>
-                { categories.length > 0 && categories.map((category) => <span className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4' key={category.id + 'product'}>{category.name}</span>)}
+                { filteredCategories.map((category) => 
+                <span className='w-fit bg-amber-900 bg-opacity-10 text-amber-900 rounded-sm py-1 px-4 relative group' key={category.id + 'product'}>{category.name} 
+                <button 
+                className='opacity-0 group-hover:opacity-100 absolute m-0.5 transition-all top-0 right-0 hover:bg-amber-900 hover:bg-opacity-20 w-fit h-fit flex items-center justify-center'><CloseIcon w={10} h={10} fill='#78350f'/></button>
+                </span>)}
                 </div>
             <button type='submit'>{selectedProductId ? 'Save' :  'Create' }</button>
         </form>

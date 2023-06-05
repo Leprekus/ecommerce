@@ -7,7 +7,7 @@ interface CategoriesStore {
     currentCategory: number | null;
     actions: {
         addToCategories: (category: Category) => void;
-        setCategories: (category: Category[]) => void;
+        
         setCurrentCategory: (id: number) => void;
         removeCurrentCategory: () => void;
     }
@@ -18,7 +18,7 @@ const useCategoriesStore = create<CategoriesStore>()((set) => ({
     currentCategory: null,
     actions: {
         addToCategories: (category: Category) => set((state) => ({ categories: [category, ...state.categories]})),
-        setCategories: (category: Category[]) => set((state) => ({ categories: [...category]})),
+        
         setCurrentCategory: (id: number) => set((state) => ({ currentCategory: id })),
         removeCurrentCategory: () => set((state) => ({ currentCategory: null })),
     }
